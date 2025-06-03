@@ -9,16 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@huggingface/transformers": "^3.5.2",
+    "@tensorflow/tfjs": "^4.22.0",
+    "@tensorflow/tfjs-node": "^4.22.0",
+    "autoprefixer": "^10.4.21",
+    "langchain": "^0.3.27",
+    "lucide-react": "^0.511.0",
+    "next": "15.3.3",
+    "openai": "^5.0.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "15.3.3"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@tailwindcss/postcss": "^4.1.8",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
