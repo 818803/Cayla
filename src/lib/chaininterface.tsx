@@ -1,10 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import ChatInterface from '../components/chatinterface';
-import { Moon, Sun, Sparkles, MessageCircle, Zap, Shield } from 'lucide-react';
-import { throws } from 'assert';
-
+import ChatInterface from '@/components/chatinterface';import { Moon, Sun, Sparkles, MessageCircle, Zap, Shield } from 'lucide-react';
 export default function ChatPage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -36,27 +33,31 @@ export default function ChatPage() {
     setIsDarkMode(!isDarkMode);
   };
 
-  const handleSendMessage = async (message: string): Promise<string> => {
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message }),
-      });
+const handleSendMessage = async (message: string): Promise<string> => {
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message }),
+    });
 
-      // if (!response.ok) {
-      //   throw new Error('Failed to send message');
-      // }
-
-      const data = await response.json();
-      return data.reply || "I'm sorry, I didn't understand that.";
-    } catch (error) {
-      console.error('Error:', error);
-      return "I'm experiencing some technical difficulties. Please try again.";
+    const data = await response.json();
+    
+    // Handle both success and error responses that contain a 'reply' field
+    if (data.reply) {
+      return data.reply;
     }
-  };
+    
+    // Fallback for unexpected response format
+    return data.message || "I'm sorry, I didn't understand that.";
+    
+  } catch (error) {
+    console.error('Error:', error);
+    return "I'm experiencing some technical difficulties. Please try again.";
+  }
+};
 
   if (!isLoaded) {
     return (
@@ -113,7 +114,7 @@ export default function ChatPage() {
                       : 'linear-gradient(135deg, #1e293b 0%, #475569 100%)'
                   }}
                 >
-                  AI Assistant
+                  Cayala
                 </h1>
                 <div className="flex items-center space-x-2 mt-1">
                   <div className="flex space-x-1">
@@ -249,7 +250,7 @@ export default function ChatPage() {
                       className="text-xl font-bold mb-1"
                       style={{ color: isDarkMode ? '#f1f5f9' : '#1e293b' }}
                     >
-                      AI Assistant
+                      Cayala
                     </h2>
                     <div className="flex items-center space-x-3">
                       <div className="flex items-center space-x-2">

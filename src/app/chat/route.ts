@@ -3,14 +3,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 interface ChatRequest {
   message: string;
-}
-interface ChatRequest {
-  message: string;
+  useLocalModel?: boolean;
 }
 
 interface ChatResponse {
   reply: string;
   timestamp: string;
+  source: 'openai' | 'huggingface' | 'local' | 'fallback';
 }
 
 // Option 1: Using OpenAI API (requires API key)
@@ -39,11 +38,15 @@ async function getOpenAIResponse(message: string): Promise<string> {
       }),
     });
 
+    if (!response.ok) {
+      throw new Error(`OpenAI API error: ${response.status}`);
+    }
+
     const data = await response.json();
     return data.choices[0]?.message?.content || "couldn't process that rn";
   } catch (error) {
     console.error('OpenAI API error:', error);
-    return "api is down or something";
+    throw error;
   }
 }
 
@@ -68,24 +71,56 @@ async function getHuggingFaceResponse(message: string): Promise<string> {
       }
     );
 
+    if (!response.ok) {
+      throw new Error(`Hugging Face API error: ${response.status}`);
+    }
+
     const data = await response.json();
     return data.generated_text || "hmm not sure about that";
   } catch (error) {
     console.error('Hugging Face API error:', error);
-    return "ai brain is offline";
+    throw error;
   }
 }
 
 // Option 3: Enhanced pattern matching with more comprehensive responses
 function getSmartResponse(message: string): string {
-  const msg = message.toLowerCase();
+  const msg = message.toLowerCase().trim();
+  
+  // Handle empty messages
+  if (!msg) {
+    return "you didn't say anything lol";
+  }
+  
+  // Greetings
+  if (msg.match(/^(hi|hello|hey|sup|what's up|yo)$/)) {
+    const greetings = ["hey there", "sup", "hello", "yo what's good", "hey"];
+    return greetings[Math.floor(Math.random() * greetings.length)];
+  }
+  
+  // How are you
+  if (msg.includes('how are you') || msg.includes('how you doing')) {
+    return "i'm doing alright, just chillin. how about you?";
+  }
+  
+  // Thanks
+  if (msg.includes('thank') || msg.includes('thanks')) {
+    return "no problem, glad i could help";
+  }
+  
+  // Goodbye
+  if (msg.match(/^(bye|goodbye|see you|later|peace)$/)) {
+    return "catch you later";
+  }
   
   // Math questions
   if (msg.includes('what is') && (msg.includes('+') || msg.includes('-') || msg.includes('*') || msg.includes('/'))) {
     try {
       const mathExpression = msg.match(/[\d\+\-\*\/\.\s]+/)?.[0];
       if (mathExpression) {
-        const result = eval(mathExpression.replace(/[^0-9+\-*/().]/g, ''));
+        // Safe math evaluation
+        const sanitized = mathExpression.replace(/[^0-9+\-*/().]/g, '');
+        const result = Function('"use strict"; return (' + sanitized + ')')();
         return `that's ${result}`;
       }
     } catch {
@@ -167,28 +202,41 @@ export async function POST(request: NextRequest) {
     
     if (!body.message || typeof body.message !== 'string') {
       return NextResponse.json(
-        { error: 'Message is required and must be a string' },
+        { reply: 'you need to actually say something', timestamp: new Date().toISOString(), source: 'fallback' as const },
         { status: 400 }
       );
     }
 
+    // Add realistic delay
     await new Promise(resolve => setTimeout(resolve, 300 + Math.random() * 700));
 
     let reply: string;
+    let source: ChatResponse['source'] = 'fallback';
 
-    // Try different AI approaches in order of preference
-    if (process.env.OPENAI_API_KEY) {
-      reply = await getOpenAIResponse(body.message);
-    } else if (process.env.HUGGINGFACE_API_KEY) {
-      reply = await getHuggingFaceResponse(body.message);
-    } else {
-      // Fallback to enhanced pattern matching
+    try {
+      // Priority order for getting responses
+      if (process.env.OPENAI_API_KEY) {
+        reply = await getOpenAIResponse(body.message);
+        source = 'openai';
+      } else if (process.env.HUGGINGFACE_API_KEY) {
+        reply = await getHuggingFaceResponse(body.message);
+        source = 'huggingface';
+      } else {
+        // Fallback to pattern matching
+        reply = getSmartResponse(body.message);
+        source = 'fallback';
+      }
+    } catch (error) {
+      console.error('Primary response method failed:', error);
+      // Fallback to pattern matching
       reply = getSmartResponse(body.message);
+      source = 'fallback';
     }
 
     const response: ChatResponse = {
       reply,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      source
     };
 
     return NextResponse.json(response);
@@ -196,7 +244,11 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Chat API error:', error);
     return NextResponse.json(
-      { error: 'something went wrong, my bad' },
+      { 
+        reply: 'something went wrong on my end, try again',
+        timestamp: new Date().toISOString(),
+        source: 'fallback' as const
+      },
       { status: 500 }
     );
   }
@@ -204,7 +256,15 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   return NextResponse.json(
-    { message: 'ai is ready to answer stuff' },
+    { 
+      message: 'ai is ready to answer stuff',
+      availableSources: {
+        openai: !!process.env.OPENAI_API_KEY,
+        huggingface: !!process.env.HUGGINGFACE_API_KEY,
+        local: false, // Disabled for now
+        fallback: true
+      }
+    },
     { status: 200 }
   );
 }
