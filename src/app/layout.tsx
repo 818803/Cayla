@@ -1,33 +1,39 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import './globals.css';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import LayoutWrapper from '@/components/LayoutWrapper';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Chatbot App",
-  description: "A minimal chatbot interface built with Next.js",
+  title: 'Cayla - Am I Overreacting?',
+  description: 'A private, AI-powered web app that helps teens make sense of emotional moments. Get clarity on arguments, awkward texts, or social drama.',
+  keywords: 'AI, chatbot, teens, mental health, emotional intelligence, perspective, advice',
+  authors: [{ name: 'Cayla AI' }],
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className="h-full">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[var(--color-background)] text-[var(--color-foreground)] min-h-screen flex flex-col`}
+    <html lang="en" suppressHydrationWarning>
+      <body 
+        className={`${inter.className} antialiased`}
+        suppressHydrationWarning
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
+        </ThemeProvider>
       </body>
     </html>
   );

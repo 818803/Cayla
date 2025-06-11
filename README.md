@@ -1,22 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cayla - Am I Overreacting?
+
+"Am I Overreacting?" is a private, AI-powered web app that helps teens make sense of emotional moments like arguments, awkward texts, or social drama. Users input a situation, and the app's AI, Cayla, breaks it down with empathy—showing their perspective, the other side, and what might be going on emotionally. 
+
+The goal is clarity, not judgment—giving users a safe space to process feelings without needing a therapist or account.
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [Project Structure](#project-structure)
+- [Features](#features)
+- [API Endpoints](#api-endpoints)
 
 ## Getting Started
 
-First, run the development server:
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+You need to have Node.js and npm (or yarn) installed on your machine.
+
+- [Node.js](https://nodejs.org/) (v18.x or later recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/your-repository-name.git
+    cd your-repository-name
+    ```
+
+2.  **Install dependencies:**
+    Using npm:
+    ```bash
+    npm install
+    ```
+    Or using yarn:
+    ```bash
+    yarn install
+    ```
+
+## Running the Application
+
+To run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
+
+The application is organized as follows:
+
+-   `src/app/`: Contains the main application logic using the Next.js App Router.
+    -   `(home)/page.tsx`: The main landing page of the application.
+    -   `chat/page.tsx`: The chat interface page where users interact with Cayla.
+    -   `layout.tsx`: The root layout for the application, including global navigation.
+    -   `api/chat/route.ts`: The API endpoint for the chat functionality.
+-   `src/components/`: Contains reusable React components.
+    -   `chatinterface.tsx`: The main component for the chat UI.
+-   `src/lib/`: Contains the core logic for the AI assistant.
+-   `public/`: Contains static assets like images and fonts.
+-   `globals.css`: Global styles for the application.
+
+## Features
+
+-   **Homepage:** A landing page explaining the purpose of the app.
+-   **AI Chat with Cayla:** A real-time chat interface to interact with the AI assistant, Cayla.
+-   **Empathetic Analysis:** Cayla breaks down user-submitted situations with empathy.
+-   **Privacy-Focused:** No accounts or sign-ups required.
+-   **Dark Mode:** The application supports a dark mode theme.
+
+## API Endpoints
+
+-   `POST /api/chat`: The main endpoint for sending messages to Cayla.
+    -   **Request Body:**
+        ```json
+        {
+          "message": "Your message to the AI"
+        }
+        ```
+    -   **Response:**
+        ```json
+        {
+          "reply": "Cayla's response"
+        }
+        ```
+
+---
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

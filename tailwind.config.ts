@@ -1,43 +1,33 @@
-import type { Config } from 'tailwindcss'
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  darkMode: 'class', // Enable class-based dark mode
   theme: {
     extend: {
       colors: {
-        // Custom color palette
-        primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-        },
+        'sakura-pink': '#FFB7C5',
+        'sakura-dark': '#A17D83',
+        'sakura-bg': '#FFF5F7',
+        'sakura-gray': '#FCEEF0',
+        'sakura-text': '#5B5052',
+        'sakura-accent': '#FF8FAB',
       },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
       },
-      animation: {
-        'fade-in': 'fadeIn 0.3s ease-out',
-        'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      borderRadius: {
+        '4xl': '2rem',
       },
-      backdropBlur: {
-        xs: '2px',
+       boxShadow: {
+        'pink-glow': '0 0 20px 0 rgba(255, 143, 171, 0.5)',
       }
     },
   },
-  plugins: [],
-}
-
-export default config
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
+};
