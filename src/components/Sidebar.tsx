@@ -16,6 +16,9 @@ import {
   Scale,
   PlusCircle,
   Trash2,
+  Sparkles,
+  Calendar,
+  BookHeart,
 } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -24,8 +27,20 @@ import { getHistory, Conversation, deleteConversation } from '@/lib/conversation
 const featureItems = [
   { href: '/features/relationship-advice', icon: HeartHandshake, label: 'Relationship Advice' },
   { href: '/features/traffic-light', icon: TrafficCone, label: 'Traffic Light System' },
-  { href: '/features/tone-analyzer', icon: Zap, label: 'Tone Analyzer' },
+  { href: '/features/tone-analyzer', icon: Zap, label: 'Response' },
   { href: '/mediator', icon: Scale, label: 'AI Mediator' },
+];
+
+const motivationItems = [
+  { href: '/features/motivation', icon: Sparkles, label: 'Get a Boost' },
+];
+
+const planningItems = [
+  { href: '/features/planning', icon: Calendar, label: 'My Calendar' },
+];
+
+const selfReflectionItems = [
+  { href: '/features/self-reflection', icon: BookHeart, label: 'My Journal' },
 ];
 
 const resourcesItems = [
@@ -44,15 +59,15 @@ const NavItem: React.FC<NavItemProps> = ({ href, icon: Icon, label, pathname }) 
   return (
     <Link href={href} passHref>
       <div
-        className={`flex items-center space-x-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 ease-in-out
+        className={`flex items-center space-x-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ease-in-out
           ${
             isActive
-              ? 'bg-sakura-accent text-white shadow-lg shadow-sakura-accent/30'
+              ? 'bg-sakura-accent text-white shadow-md shadow-sakura-accent/30'
               : 'text-sakura-dark hover:bg-sakura-bg'
           }`}
       >
-        <Icon className={`h-5 w-5 ${isActive ? 'text-white' : 'text-sakura-accent'}`} />
-        <span className="font-medium">{label}</span>
+        <Icon className={`h-4 w-4 ${isActive ? 'text-white' : 'text-sakura-accent'}`} />
+        <span className="text-sm font-medium">{label}</span>
       </div>
     </Link>
   );
@@ -62,6 +77,9 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
   const pathname = usePathname();
   const [featuresOpen, setFeaturesOpen] = useState(true);
   const [historyOpen, setHistoryOpen] = useState(true);
+  const [motivationOpen, setMotivationOpen] = useState(true);
+  const [planningOpen, setPlanningOpen] = useState(true);
+  const [reflectionOpen, setReflectionOpen] = useState(true);
   const [conversationHistory, setConversationHistory] = useState<Conversation[]>([]);
 
   useEffect(() => {
@@ -100,16 +118,16 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       className="flex-shrink-0 bg-white border-r border-sakura-gray flex flex-col relative overflow-hidden"
     >
-        <div className="w-64 h-full flex flex-col p-6">
-          <div className="text-2xl font-bold text-sakura-dark mb-12">
-            <Link href="/">Home</Link>
+        <div className="w-64 h-full flex flex-col p-4">
+          <div className="text-xl font-bold text-sakura-dark mb-8">
+            <Link href="/">Xin AI (心爱)</Link>
           </div>
 
-          <nav className="flex-grow space-y-6">
+          <nav className="flex-grow space-y-4">
             <div>
               <Link href="/chat" passHref>
-                <div className="flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer bg-sakura-accent text-white shadow-lg shadow-sakura-accent/30 hover:bg-opacity-90">
-                    <div className="flex items-center space-x-3">
+                <div className="flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer bg-sakura-accent text-white shadow-lg shadow-sakura-accent/30 hover:bg-opacity-90">
+                    <div className="flex items-center space-x-2">
                         <MessageSquare className="h-5 w-5" />
                         <span className="font-medium">New Chat</span>
                     </div>
@@ -118,9 +136,9 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
               </Link>
             </div>
 
-            <div className="flex-grow overflow-y-auto -mr-4 pr-4">
+            <div className="flex-grow overflow-y-auto -mr-3 pr-3">
               <button
-                className="w-full flex justify-between items-center px-4 mb-2 text-sm font-semibold text-sakura-dark/50 uppercase tracking-wider"
+                className="w-full flex justify-between items-center px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider"
                 onClick={() => setHistoryOpen(!historyOpen)}
               >
                 <span>Chat History</span>
@@ -133,16 +151,16 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    className="space-y-1 overflow-hidden"
+                    className="space-y-0.5 overflow-hidden"
                   >
                     {conversationHistory.map((item) => {
                       const isActive = pathname === `/chat/${item.id}`;
                       return (
                         <Link key={item.id} href={`/chat/${item.id}`} passHref>
-                          <div className={`group flex justify-between items-center space-x-3 px-4 py-2 rounded-lg cursor-pointer text-sm transition-all duration-200 ease-in-out ${isActive ? 'bg-sakura-bg text-sakura-accent font-semibold' : 'text-sakura-dark hover:bg-sakura-bg'}`}>
+                          <div className={`group flex justify-between items-center space-x-2 px-3 py-1.5 rounded-md cursor-pointer text-xs transition-all duration-200 ease-in-out ${isActive ? 'bg-sakura-bg text-sakura-accent font-semibold' : 'text-sakura-dark hover:bg-sakura-bg'}`}>
                             <span className="truncate flex-1">{item.title}</span>
                             <button onClick={(e) => handleDelete(e, item.id)} className="opacity-0 group-hover:opacity-100 text-sakura-dark/50 hover:text-red-500 transition-opacity">
-                                <Trash2 size={14} />
+                                <Trash2 size={12} />
                             </button>
                           </div>
                         </Link>
@@ -155,7 +173,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
 
             <div>
               <button
-                className="w-full flex justify-between items-center px-4 mb-2 text-sm font-semibold text-sakura-dark/50 uppercase tracking-wider"
+                className="w-full flex justify-between items-center px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider"
                 onClick={() => setFeaturesOpen(!featuresOpen)}
               >
                 <span>Features</span>
@@ -168,9 +186,84 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    className="space-y-1 overflow-hidden"
+                    className="space-y-0.5 overflow-hidden"
                   >
                     {featureItems.map((item) => (
+                      <NavItem key={item.href} {...item} pathname={pathname} />
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <div>
+              <button
+                className="w-full flex justify-between items-center px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider"
+                onClick={() => setMotivationOpen(!motivationOpen)}
+              >
+                <span>Motivation</span>
+                {motivationOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </button>
+              <AnimatePresence>
+                {motivationOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="space-y-0.5 overflow-hidden"
+                  >
+                    {motivationItems.map((item) => (
+                      <NavItem key={item.href} {...item} pathname={pathname} />
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <div>
+              <button
+                className="w-full flex justify-between items-center px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider"
+                onClick={() => setPlanningOpen(!planningOpen)}
+              >
+                <span>Planning</span>
+                {planningOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </button>
+              <AnimatePresence>
+                {planningOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="space-y-0.5 overflow-hidden"
+                  >
+                    {planningItems.map((item) => (
+                      <NavItem key={item.href} {...item} pathname={pathname} />
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <div>
+              <button
+                className="w-full flex justify-between items-center px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider"
+                onClick={() => setReflectionOpen(!reflectionOpen)}
+              >
+                <span>Self Reflection</span>
+                {reflectionOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </button>
+              <AnimatePresence>
+                {reflectionOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="space-y-0.5 overflow-hidden"
+                  >
+                    {selfReflectionItems.map((item) => (
                       <NavItem key={item.href} {...item} pathname={pathname} />
                     ))}
                   </motion.div>
@@ -181,7 +274,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
           </nav>
 
           <div className="mt-auto">
-            <h3 className="px-4 mb-2 text-sm font-semibold text-sakura-dark/50 uppercase tracking-wider">Resources</h3>
+            <h3 className="px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider">Resources</h3>
             {resourcesItems.map((item) => (
               <NavItem key={item.href} {...item} pathname={pathname} />
             ))}

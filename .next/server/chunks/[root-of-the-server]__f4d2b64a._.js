@@ -59,11 +59,35 @@ module.exports = mod;
 var { g: global, __dirname } = __turbopack_context__;
 {
 // lib/ai-providers.ts
+// Custom Error Types
 __turbopack_context__.s({
+    "AIProviderError": (()=>AIProviderError),
+    "AuthError": (()=>AuthError),
     "EnhancedChatbot": (()=>EnhancedChatbot),
     "HuggingFaceService": (()=>HuggingFaceService),
-    "OpenAIService": (()=>OpenAIService)
+    "OpenAIService": (()=>OpenAIService),
+    "RateLimitError": (()=>RateLimitError)
 });
+class AIProviderError extends Error {
+    status;
+    provider;
+    constructor(message, status, provider){
+        super(message), this.status = status, this.provider = provider;
+        this.name = 'AIProviderError';
+    }
+}
+class AuthError extends AIProviderError {
+    constructor(provider){
+        super('Authentication error. Please check your API key.', 401, provider);
+        this.name = 'AuthError';
+    }
+}
+class RateLimitError extends AIProviderError {
+    constructor(provider){
+        super("I'm receiving too many requests right now. Please try again in a moment.", 429, provider);
+        this.name = 'RateLimitError';
+    }
+}
 class OpenAIService {
     apiKey;
     baseUrl = 'https://api.openai.com/v1';
@@ -88,7 +112,15 @@ class OpenAIService {
             });
             if (!response.ok) {
                 const errorData = await response.json().catch(()=>({}));
-                throw new Error(`OpenAI API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+                const errorMessage = errorData.error?.message || `Unknown error with status ${response.status}`;
+                console.error(`OpenAI API Error: ${response.status}`, errorData);
+                if (response.status === 401) {
+                    throw new AuthError('OpenAI');
+                }
+                if (response.status === 429) {
+                    throw new RateLimitError('OpenAI');
+                }
+                throw new AIProviderError(errorMessage, response.status, 'OpenAI');
             }
             const data = await response.json();
             return {
@@ -96,12 +128,11 @@ class OpenAIService {
                 provider: 'OpenAI'
             };
         } catch (error) {
-            console.error('OpenAI API Error:', error);
-            return {
-                message: 'Sorry, I encountered an error with OpenAI. Please try again.',
-                error: error instanceof Error ? error.message : 'Unknown error',
-                provider: 'OpenAI'
-            };
+            console.error('Failed to generate response from OpenAI:', error);
+            if (error instanceof AIProviderError) {
+                throw error;
+            }
+            throw new AIProviderError('An unexpected error occurred while connecting to the AI service.', 503, 'OpenAI');
         }
     }
     // For streaming responses (optional)
@@ -279,11 +310,11 @@ class EnhancedChatbot {
             content: this.systemPrompt
         });
     }
-    async processMessage(userMessage) {
+    async processMessage(userMessage, options = {}) {
         // Add user message to history
         this.conversationHistory.push({
             role: 'user',
-            content: userMessage
+            content: options.short ? `Please answer the following concisely, in one or two sentences at most. ${userMessage}` : userMessage
         });
         // Check for predefined responses first
         const predefinedResponse = this.checkPredefinedResponses(userMessage);
@@ -392,6 +423,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$serv
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$ai$2d$provider$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/ai-provider.ts [app-route] (ecmascript)");
 ;
 ;
+// import { detectEmotion } from '@/lib/sentiment-analysis';
 // This is a simplified in-memory store.
 // In production, you would use a database or a service like Redis to store conversations per user.
 const conversations = new Map();
@@ -408,12 +440,30 @@ function getChatbot(sessionId) {
     return conversations.get(sessionId);
 }
 async function POST(request) {
+    if (!process.env.OPENAI_API_KEY) {
+        console.error('Missing OPENAI_API_KEY environment variable');
+        return new Response('The AI service is not configured correctly. Please check server logs.', {
+            status: 500
+        });
+    }
     try {
         const body = await request.json();
-        const { message, sessionId } = body;
-        if (!message) {
+        const { messages } = body;
+        // Get metadata from headers
+        const sessionId = request.headers.get('X-Session-Id');
+        const isShort = request.headers.get('X-Short-Mode') === 'true';
+        if (!messages || messages.length === 0) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'Message is required'
+                error: 'Messages are required'
+            }, {
+                status: 400
+            });
+        }
+        const lastMessage = messages[messages.length - 1];
+        const userContent = lastMessage.content;
+        if (!userContent) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: 'Message content is required'
             }, {
                 status: 400
             });
@@ -426,24 +476,23 @@ async function POST(request) {
             });
         }
         const chatbot = getChatbot(sessionId);
-        const response = await chatbot.processMessage(message);
-        if (response.error) {
-            console.error('Chat API Error from AI Provider:', response.error);
-            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: response.message || 'Internal server error'
-            }, {
-                status: 500
-            });
-        }
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            reply: response.message,
-            timestamp: new Date().toISOString()
+        const response = await chatbot.processMessage(userContent, {
+            short: isShort
+        });
+        // const emotion = await detectEmotion(response.message);
+        // const headers = new Headers();
+        // headers.append('X-Emotion', emotion);
+        return new Response(response.message, {
+            status: 200
         });
     } catch (error) {
         console.error('Chat API Error:', error);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Internal server error'
-        }, {
+        if (error instanceof __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$ai$2d$provider$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["AIProviderError"]) {
+            return new Response(error.message, {
+                status: error.status
+            });
+        }
+        return new Response('An internal server error occurred.', {
             status: 500
         });
     }

@@ -1,9 +1,8 @@
 {
   "/(home)/page": "app/(home)/page.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/api/chat/route": "app/api/chat/route.js",
+  "/api/chat/route": "app-edge-has-no-entrypoint",
   "/chat/[sessionId]/page": "app/chat/[sessionId]/page.js",
-  "/chat/page": "app/chat/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/features/relationship-advice/page": "app/features/relationship-advice/page.js",
   "/mediator/page": "app/mediator/page.js"

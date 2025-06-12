@@ -6,4 +6,4 @@ export interface ChatMessage {
   emotion?: Emotion;
 }
 
-export type Emotion = 'Happy' | 'Sad' | 'Angry' | 'Annoyed' | 'Love' | 'Goofy' | 'Barf' | 'Normal'; 
+export type Emotion = 'Joy' | 'Sadness' | 'Anger' | 'Fear' | 'Surprise' | 'Disgust' | 'Love' | 'Normal' | 'Analytical' | 'Happy' | 'Sad' | 'Annoyed' | 'Goofy' | 'Barf' | 'Concern' | 'Curiosity' | 'Gratitude' | 'Excitement' | 'Contentment' | 'Warmth' | 'Understanding' | 'Empathy'; 

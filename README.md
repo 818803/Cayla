@@ -1,112 +1,108 @@
-# Cayla - Am I Overreacting?
+# Xin AI (心爱) - Your Personal Guide to Emotional Clarity
 
-"Am I Overreacting?" is a private, AI-powered web app that helps teens make sense of emotional moments like arguments, awkward texts, or social drama. Users input a situation, and the app's AI, Cayla, breaks it down with empathy—showing their perspective, the other side, and what might be going on emotionally. 
+**Xin AI** is a private, AI-powered web app that helps teens make sense of emotional moments. Get clarity on arguments, awkward texts, or social drama. It's a safe space to get perspective, completely private.
 
-The goal is clarity, not judgment—giving users a safe space to process feelings without needing a therapist or account.
+## About The Project
 
-## Table of Contents
+Navigating the social and emotional landscape of teenage years can be tough. It's easy to feel overwhelmed, misunderstood, or to simply overthink a situation. Xin AI was built to be a digital companion for these moments.
+It leverages a compassionate AI named **Cayla** to help users:
 
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Running the Application](#running-the-application)
-- [Project Structure](#project-structure)
-- [Features](#features)
-- [API Endpoints](#api-endpoints)
+- **Gain Perspective:** Understand if they are overreacting or if their feelings are justified.
+- **Process Emotions:** Talk through situations in a private, non-judgmental space.
+- **Communicate Better:** Get suggestions on how to approach difficult conversations.
 
-## Getting Started
+The entire application is designed with privacy at its core. Conversations are not stored long-term, and there are no user accounts.
 
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
+### Built With
 
-### Prerequisites
-
-You need to have Node.js and npm (or yarn) installed on your machine.
-
-- [Node.js](https://nodejs.org/) (v18.x or later recommended)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-
-### Installation
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/your-repository-name.git
-    cd your-repository-name
-    ```
-
-2.  **Install dependencies:**
-    Using npm:
-    ```bash
-    npm install
-    ```
-    Or using yarn:
-    ```bash
-    yarn install
-    ```
-
-## Running the Application
-
-To run the development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Project Structure
-
-The application is organized as follows:
-
--   `src/app/`: Contains the main application logic using the Next.js App Router.
-    -   `(home)/page.tsx`: The main landing page of the application.
-    -   `chat/page.tsx`: The chat interface page where users interact with Cayla.
-    -   `layout.tsx`: The root layout for the application, including global navigation.
-    -   `api/chat/route.ts`: The API endpoint for the chat functionality.
--   `src/components/`: Contains reusable React components.
-    -   `chatinterface.tsx`: The main component for the chat UI.
--   `src/lib/`: Contains the core logic for the AI assistant.
--   `public/`: Contains static assets like images and fonts.
--   `globals.css`: Global styles for the application.
+*   [Next.js](https://nextjs.org/)
+*   [React](https://reactjs.org/)
+*   [Tailwind CSS](https://tailwindcss.com/)
+*   [OpenAI API](https://openai.com/api/)
+*   [Vercel](https://vercel.com/)
 
 ## Features
 
--   **Homepage:** A landing page explaining the purpose of the app.
--   **AI Chat with Cayla:** A real-time chat interface to interact with the AI assistant, Cayla.
--   **Empathetic Analysis:** Cayla breaks down user-submitted situations with empathy.
--   **Privacy-Focused:** No accounts or sign-ups required.
--   **Dark Mode:** The application supports a dark mode theme.
+- **Private AI Chat:** Have a conversation with Cayla, your AI friend.
+- **Dynamic Emotional Avatar:** The avatar for Cayla changes based on the detected emotion of the conversation.
+- **AI Mediator:** Paste a conversation between two people and get a neutral, AI-powered analysis of the argument.
+- **The 'Traffic Light' System:** Helps you categorize the severity of a social situation (red, yellow, or green flag).
+- **Tone Analyzer:** Get an analysis of the underlying tone in a text or email.
+- **Relationship Advice:** Navigate conflicts with friends, family, or partners.
+- **Conversation History:** Your recent chats are saved locally for you to revisit.
+- **Dark/Light Mode:** Switch between themes for your comfort.
 
-## API Endpoints
+## Getting Started
 
--   `POST /api/chat`: The main endpoint for sending messages to Cayla.
-    -   **Request Body:**
-        ```json
-        {
-          "message": "Your message to the AI"
-        }
-        ```
-    -   **Response:**
-        ```json
-        {
-          "reply": "Cayla's response"
-        }
-        ```
+To get a local copy up and running follow these simple example steps.
 
----
+### Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+You'll need `npm` installed on your machine.
+* npm
+  ```sh
+  npm install npm@latest -g
+  ```
 
-## Learn More
+### Installation
 
-To learn more about Next.js, take a look at the following resources:
+1.  Clone the repo
+    ```sh
+    git clone https://github.com/your_username_/Project-Cayla.git
+    ```
+2.  Install NPM packages
+    ```sh
+    npm install
+    ```
+3.  Enter your API key in `.env.local`
+    ```js
+    OPENAI_API_KEY = 'ENTER YOUR API KEY';
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Usage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This app provides a suite of tools to help users navigate complex social and emotional situations.
 
-## Deploy on Vercel
+- The main **Chat** interface allows you to talk directly with Cayla.
+- The **AI Mediator** is useful for getting an unbiased opinion on a disagreement.
+- The **Features** section contains more targeted tools for specific scenarios like analyzing the tone of a message or getting relationship advice.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Roadmap
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [x] Core Chatbot Functionality
+- [x] AI Mediator Tool
+- [x] Dark Mode
+- [x] Conversation History
+- [ ] User Accounts & Saved Journaling
+- [ ] Expanded Emotional Toolkit
+- [ ] Multi-language Support
+
+See the [open issues](https://github.com/your_username_/Project-Cayla/issues) for a full list of proposed features (and known issues).
+
+## Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
+
+## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+## Contact
+
+Your Name - [@your_twitter_handle](https://twitter.com/your_twitter_handle) - email@example.com
+
+Project Link: [https://github.com/your_username_/Project-Cayla](https://github.com/your_username_/Project-Cayla)
+
+## Acknowledgments
+*   [Vercel AI SDK](https://sdk.vercel.ai/)
+*   [shadcn/ui](https://ui.shadcn.com/)
+*   [Lucide Icons](https://lucide.dev/)

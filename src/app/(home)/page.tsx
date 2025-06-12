@@ -62,10 +62,10 @@ export default function Homepage() {
             Confused? Overwhelmed?
           </h1>
           <div className="mt-4 text-3xl md:text-4xl text-indigo-200">
-            Cayla helps you <TypewriterText />
+            Xin AI helps you <TypewriterText />
           </div>
           <p className="mt-6 max-w-2xl mx-auto text-xl text-indigo-100">
-            Cayla helps you understand your feelings and navigate tricky social situations.
+            Xin AI (心爱) helps you understand your feelings, navigate tricky social situations, and build your confidence.
             It&apos;s a safe space to get perspective, completely private.
           </p>
           <div className="mt-12 flex justify-center items-center gap-4">
@@ -88,7 +88,7 @@ export default function Homepage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-800">Your Personal Guide to Emotional Clarity</h2>
-            <p className="mt-4 text-lg text-gray-500 max-w-3xl mx-auto">Cayla isn&apos;t just a chatbot. It&apos;s a suite of tools designed to empower you.</p>
+            <p className="mt-4 text-lg text-gray-500 max-w-3xl mx-auto">Xin AI isn&apos;t just a chatbot. It&apos;s a suite of tools designed to empower you.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
             <FeatureCard

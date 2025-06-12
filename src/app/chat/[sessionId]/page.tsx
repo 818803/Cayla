@@ -1,103 +1,98 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { useChat } from 'ai/react';
 import { useParams } from 'next/navigation';
 import ChatInterface from '@/components/chatinterface';
-import { ChatMessage, Emotion } from '@/lib/types';
-import { saveConversation } from '@/lib/conversation-history';
+import { getConversation, saveConversation } from '@/lib/conversation-history';
+import { Emotion, ChatMessage as UIChatMessage } from '@/lib/types';
+import { type Message as CoreMessage } from 'ai/react';
+
+function transformToUIMessages(messages: CoreMessage[], emotionMap: Map<string, Emotion>): UIChatMessage[] {
+  return messages.map((msg) => ({
+    id: msg.id,
+    message: msg.content,
+    sender: msg.role === 'user' ? 'user' : 'bot',
+    emotion: msg.role === 'assistant' ? emotionMap.get(msg.id) || 'Normal' : undefined,
+    timestamp: msg.createdAt || new Date(),
+  }));
+}
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentEmotion, setCurrentEmotion] = useState<Emotion>('Normal');
   const params = useParams();
   const sessionId = params.sessionId as string;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(e.target.value);
-  };
+  const [currentEmotion, setCurrentEmotion] = useState<Emotion>('Normal');
+  const [emotionMap, setEmotionMap] = useState<Map<string, Emotion>>(new Map());
+  const [initialMessages, setInitialMessages] = useState<CoreMessage[]>([]);
+  const [isHistoryLoaded, setIsHistoryLoaded] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!input.trim() || !sessionId) return;
-
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      sender: 'user',
-      message: input,
-      timestamp: new Date(),
-    };
-    
-    // If this is the first user message, save it to history
-    if (messages.filter(m => m.sender === 'user').length === 0) {
-      const newTitle = input.substring(0, 30) + (input.length > 30 ? '...' : '');
-      saveConversation(sessionId, newTitle);
-      // Notify other components that history has changed
-      window.dispatchEvent(new Event('conversationHistoryChanged'));
-    }
-
-    setMessages((prev) => [...prev, userMessage]);
-    const currentInput = input;
-    setInput('');
-    setIsLoading(true);
-
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: currentInput, sessionId }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.statusText}`);
+  useEffect(() => {
+    if (sessionId && !isHistoryLoaded) {
+      const conversation = getConversation(sessionId);
+      if (conversation) {
+        setInitialMessages(conversation.messages);
       }
-
-      const data = await response.json();
-      setCurrentEmotion(data.emotion || 'Normal');
-
-      const botMessage: ChatMessage = {
-        id: Date.now().toString(),
-        sender: 'bot',
-        message: data.reply,
-        timestamp: new Date(),
-        emotion: data.emotion,
-      };
-
-      setMessages((prev) => [...prev, botMessage]);
-    } catch (error) {
-      console.error('Error fetching chat response:', error);
-      setCurrentEmotion('Sad');
-      const errorMessage: ChatMessage = {
-        id: Date.now().toString(),
-        sender: 'bot',
-        message: 'Sorry, I had trouble connecting. Please try again in a moment.',
-        timestamp: new Date(),
-        emotion: 'Sad'
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
+      setIsHistoryLoaded(true);
     }
-  };
+  }, [sessionId, isHistoryLoaded]);
+
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error, setMessages } = useChat({
+    api: '/api/chat',
+    id: sessionId,
+    initialMessages: initialMessages,
+    onResponse: (response) => {
+      const emotion = response.headers.get('X-Emotion') as Emotion | null;
+      if (emotion) {
+        setCurrentEmotion(emotion);
+      }
+    },
+    onFinish: (message) => {
+      setEmotionMap(prev => new Map(prev).set(message.id, currentEmotion));
+    }
+  });
+  
+  useEffect(() => {
+    if (isHistoryLoaded && initialMessages.length > 0 && messages.length === 0) {
+      setMessages(initialMessages);
+    }
+  }, [isHistoryLoaded, initialMessages, messages, setMessages]);
+
+  useEffect(() => {
+    if (sessionId && messages.length > 0 && !isLoading) {
+      const firstUserMessage = messages.find(m => m.role === 'user');
+      const conversation = getConversation(sessionId);
+      const title = conversation?.title || (firstUserMessage ? firstUserMessage.content.substring(0, 30) : 'New Chat');
+      saveConversation(sessionId, title, messages);
+
+      if(messages.length > (conversation?.messages.length || 0)) {
+        window.dispatchEvent(new Event('conversationHistoryChanged'));
+      }
+    }
+  }, [messages, sessionId, isLoading]);
+  
+  const uiMessages = useMemo(() => transformToUIMessages(messages, emotionMap), [messages, emotionMap]);
+
+  if (!isHistoryLoaded) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-sakura-bg">
+        <div className="text-sakura-dark">Loading conversation...</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex justify-center items-center h-screen bg-transparent">
-       <div className="w-full h-full md:p-4 flex justify-center items-center">
-            <div className="w-full h-full max-w-2xl md:h-full md:max-h-[900px] flex flex-col bg-white dark:bg-gray-800 rounded-none md:rounded-4xl shadow-lg border border-sakura-gray dark:border-gray-700">
-                <ChatInterface
-                    messages={messages}
-                    input={input}
-                    handleInputChange={handleInputChange}
-                    handleSubmit={handleSubmit}
-                    isLoading={isLoading}
-                    currentEmotion={currentEmotion}
-                    className="h-full"
-                />
-            </div>
-       </div>
+    <div className="h-full w-full">
+      <ChatInterface
+        messages={uiMessages}
+        input={input}
+        handleInputChange={handleInputChange}
+        handleSubmit={handleSubmit}
+        isLoading={isLoading}
+        currentEmotion={currentEmotion}
+        error={error?.message}
+        className="h-full w-full"
+      />
     </div>
   );
 } 

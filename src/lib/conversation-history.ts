@@ -1,9 +1,12 @@
 'use client';
 
+import { type Message as VercelChatMessage } from 'ai';
+
 export interface Conversation {
   id: string;
   title: string;
   lastActivity: number;
+  messages: VercelChatMessage[];
 }
 
 const HISTORY_KEY = 'cayla-chat-history';
@@ -32,7 +35,7 @@ export function getHistory(): Conversation[] {
  * Adds or updates a conversation in the history.
  * If a conversation with the same ID exists, it updates its title and lastActivity.
  */
-export function saveConversation(id: string, title: string) {
+export function saveConversation(id: string, title: string, messages: VercelChatMessage[]) {
   if (typeof window === 'undefined') return;
   
   const history = getHistory();
@@ -43,9 +46,10 @@ export function saveConversation(id: string, title: string) {
     // Update existing conversation
     history[existingIndex].title = title;
     history[existingIndex].lastActivity = now;
+    history[existingIndex].messages = messages;
   } else {
     // Add new conversation
-    history.push({ id, title, lastActivity: now });
+    history.push({ id, title, lastActivity: now, messages });
   }
 
   // Keep history sorted
@@ -72,6 +76,17 @@ export function deleteConversation(id: string) {
     } catch (error) {
         console.error("Failed to delete conversation from history:", error);
     }
+}
+
+/**
+ * Retrieves a single conversation by its ID.
+ */
+export function getConversation(id: string): Conversation | undefined {
+    if (typeof window === 'undefined') {
+        return undefined;
+    }
+    const history = getHistory();
+    return history.find(c => c.id === id);
 }
 
 /**

@@ -1,4 +1,27 @@
 // lib/ai-providers.ts
+
+// Custom Error Types
+export class AIProviderError extends Error {
+  constructor(message: string, public status: number, public provider: string) {
+    super(message);
+    this.name = 'AIProviderError';
+  }
+}
+
+export class AuthError extends AIProviderError {
+  constructor(provider: string) {
+    super('Authentication error. Please check your API key.', 401, provider);
+    this.name = 'AuthError';
+  }
+}
+
+export class RateLimitError extends AIProviderError {
+  constructor(provider: string) {
+    super("I'm receiving too many requests right now. Please try again in a moment.", 429, provider);
+    this.name = 'RateLimitError';
+  }
+}
+
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
@@ -41,7 +64,17 @@ export class OpenAIService {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(`OpenAI API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+        const errorMessage = errorData.error?.message || `Unknown error with status ${response.status}`;
+        console.error(`OpenAI API Error: ${response.status}`, errorData);
+
+        if (response.status === 401) {
+          throw new AuthError('OpenAI');
+        }
+        if (response.status === 429) {
+          throw new RateLimitError('OpenAI');
+        }
+
+        throw new AIProviderError(errorMessage, response.status, 'OpenAI');
       }
 
       const data = await response.json();
@@ -50,12 +83,15 @@ export class OpenAIService {
         provider: 'OpenAI',
       };
     } catch (error) {
-      console.error('OpenAI API Error:', error);
-      return {
-        message: 'Sorry, I encountered an error with OpenAI. Please try again.',
-        error: error instanceof Error ? error.message : 'Unknown error',
-        provider: 'OpenAI',
-      };
+      console.error('Failed to generate response from OpenAI:', error);
+      if (error instanceof AIProviderError) {
+        throw error;
+      }
+      throw new AIProviderError(
+        'An unexpected error occurred while connecting to the AI service.',
+        503,
+        'OpenAI'
+      );
     }
   }
 
@@ -284,11 +320,16 @@ export class EnhancedChatbot {
     });
   }
 
-  async processMessage(userMessage: string): Promise<AIResponse> {
+  async processMessage(
+    userMessage: string, 
+    options: { short?: boolean } = {}
+  ): Promise<AIResponse> {
     // Add user message to history
     this.conversationHistory.push({
       role: 'user',
-      content: userMessage
+      content: options.short 
+        ? `Please answer the following concisely, in one or two sentences at most. ${userMessage}`
+        : userMessage
     });
 
     // Check for predefined responses first
@@ -308,14 +349,14 @@ export class EnhancedChatbot {
     let response: AIResponse;
     
     if (this.currentProvider === 'openai' && this.openaiService) {
-      response = await this.openaiService.generateResponse(this.conversationHistory);
+        response = await this.openaiService.generateResponse(this.conversationHistory);
     } else if (this.currentProvider === 'huggingface' && this.huggingfaceService) {
-      response = await this.huggingfaceService.generateResponse(this.conversationHistory);
+        response = await this.huggingfaceService.generateResponse(this.conversationHistory);
     } else {
-      response = {
+        response = {
         message: 'No AI provider configured. Please check your API keys.',
         error: 'No provider available'
-      };
+        };
     }
 
     // Add assistant response to history if successful
@@ -347,11 +388,25 @@ export class EnhancedChatbot {
     return this.currentProvider;
   }
 
-  private checkPredefinedResponses(message: string): string | null {
-    const lowerMessage = message.toLowerCase();
+  public checkPredefinedResponses(message: string): string | null {
+    const lowerMessage = message.toLowerCase().trim();
+
+    // You can add as many custom responses as you like here.
+    // The key is the user's exact phrase (in lowercase), and the value is the bot's response.
+    const customResponses: Record<string, string> = {
+      'hello': 'Hello there! Ask me anything.',
+      'how are you?': "I'm an AI, so I'm always doing great! How can I help you today?",
+      'what is your name?': "You can call me Cayla. It's nice to meet you!",
+      'tell me a joke': "Why don't scientists trust atoms? Because they make up everything!",
+      'what can you do?': "I can answer your questions, provide information, and hopefully make you smile. I'm still learning, though!",
+    };
+
+    if (customResponses[lowerMessage]) {
+      return customResponses[lowerMessage];
+    }
     
-    // Quick responses for common queries
-    if (lowerMessage.match(/^(hi|hello|hey)$/)) {
+    // Fallback to original regex for general greetings
+    if (lowerMessage.match(/^(hi|hey)$/)) {
       return 'Hello! How can I help you today?';
     }
     

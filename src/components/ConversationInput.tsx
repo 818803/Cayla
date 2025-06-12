@@ -13,11 +13,21 @@ export default function ConversationInput({ onAnalyze, isAnalyzing }: Conversati
 
   const handlePaste = async () => {
     try {
-      const clipboardText = await navigator.clipboard.readText();
-      setText(clipboardText);
+      // First, try to query for the permission
+      const permissionStatus = await navigator.permissions.query({ name: 'clipboard-read' as PermissionName });
+
+      if (permissionStatus.state === 'granted' || permissionStatus.state === 'prompt') {
+        const clipboardText = await navigator.clipboard.readText();
+        setText(clipboardText);
+      } else {
+        // Handle the case where permission is denied.
+        // Maybe show a message to the user.
+        console.error('Clipboard read permission was denied.');
+        alert('Clipboard permission is denied. Please enable it in your browser settings.');
+      }
     } catch (err) {
       console.error('Failed to read clipboard contents: ', err);
-      // You could show a toast or alert to the user here
+      alert('Could not read from clipboard. This may be due to browser security settings.');
     }
   };
 

@@ -211,11 +211,11 @@ function Homepage() {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "mt-4 text-3xl md:text-4xl text-indigo-200",
                                 children: [
-                                    "Cayla helps you ",
+                                    "Xin AI helps you ",
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$TypewriterText$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                                         fileName: "[project]/src/app/(home)/page.tsx",
                                         lineNumber: 65,
-                                        columnNumber: 29
+                                        columnNumber: 30
                                     }, this)
                                 ]
                             }, void 0, true, {
@@ -225,7 +225,7 @@ function Homepage() {
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "mt-6 max-w-2xl mx-auto text-xl text-indigo-100",
-                                children: "Cayla helps you understand your feelings and navigate tricky social situations. It's a safe space to get perspective, completely private."
+                                children: "Xin AI (心爱) helps you understand your feelings, navigate tricky social situations, and build your confidence. It's a safe space to get perspective, completely private."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/(home)/page.tsx",
                                 lineNumber: 67,
@@ -318,7 +318,7 @@ function Homepage() {
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     className: "mt-4 text-lg text-gray-500 max-w-3xl mx-auto",
-                                    children: "Cayla isn't just a chatbot. It's a suite of tools designed to empower you."
+                                    children: "Xin AI isn't just a chatbot. It's a suite of tools designed to empower you."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/(home)/page.tsx",
                                     lineNumber: 91,

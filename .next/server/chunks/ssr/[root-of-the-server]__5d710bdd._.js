@@ -125,12 +125,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$LayoutW
 ;
 ;
 const metadata = {
-    title: 'Cayla - Am I Overreacting?',
-    description: 'A private, AI-powered web app that helps teens make sense of emotional moments. Get clarity on arguments, awkward texts, or social drama.',
-    keywords: 'AI, chatbot, teens, mental health, emotional intelligence, perspective, advice',
+    title: 'Xin AI (心爱) - Your Mental Wellness Companion',
+    description: 'A private, AI-powered web app that helps teens make sense of emotional moments. Get clarity on arguments, awkward texts, or social drama with your AI friend, Cayla.',
+    keywords: 'AI, chatbot, teens, mental health, emotional intelligence, perspective, advice, Xin AI, 心爱',
     authors: [
         {
-            name: 'Cayla AI'
+            name: 'Xin AI'
         }
     ]
 };

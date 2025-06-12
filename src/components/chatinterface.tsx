@@ -14,6 +14,7 @@ interface ChatInterfaceProps {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
   currentEmotion: Emotion;
+  error?: string | null;
   className?: string;
 }
 
@@ -24,6 +25,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   handleSubmit,
   isLoading,
   currentEmotion,
+  error,
   className = '',
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -106,6 +108,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
       {/* Input Form */}
       <div className="p-4 border-t border-sakura-gray dark:border-gray-700 bg-white dark:bg-gray-800 rounded-b-4xl">
+        {error && (
+          <div className="mb-2 text-center text-sm text-red-500 bg-red-100 dark:bg-red-900/30 p-2 rounded-lg">
+            <p><strong>API Error:</strong> {error}</p>
+            <p className="text-xs text-red-400 mt-1">Please check your OPENAI_API_KEY in .env.local and restart the server.</p>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="flex items-center gap-3">
           <textarea
             value={input}

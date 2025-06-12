@@ -7,10 +7,10 @@ import LayoutWrapper from '@/components/LayoutWrapper';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Cayla - Am I Overreacting?',
-  description: 'A private, AI-powered web app that helps teens make sense of emotional moments. Get clarity on arguments, awkward texts, or social drama.',
-  keywords: 'AI, chatbot, teens, mental health, emotional intelligence, perspective, advice',
-  authors: [{ name: 'Cayla AI' }],
+  title: 'Xin AI (心爱) - Your Mental Wellness Companion',
+  description: 'A private, AI-powered web app that helps teens make sense of emotional moments. Get clarity on arguments, awkward texts, or social drama with your AI friend, Cayla.',
+  keywords: 'AI, chatbot, teens, mental health, emotional intelligence, perspective, advice, Xin AI, 心爱',
+  authors: [{ name: 'Xin AI' }],
 };
 
 export default function RootLayout({

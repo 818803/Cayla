@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Scale, Brain, Target, AlertTriangle, CheckCircle, XCircle, Users, Zap, TrendingUp, TrendingDown, Eye, Shield } from 'lucide-react';
-import { Mediator, MediationResult } from '@/lib/mediator';
+import { Mediator, MediationResult, ParticipantAnalysis } from '@/lib/mediator';
 import { Message } from '@/lib/chat-utils';
 import ConversationInput from '@/components/ConversationInput';
 
@@ -20,23 +20,24 @@ const MediatorPage = () => {
     setIsAnalyzing(true);
     setResult(null);
 
-    // Basic text parsing
-    const lines = text.trim().split('\\n');
+    const lines = text.trim().split(/\\n|\n/);
     const messages: Message[] = lines.map((line, index) => {
-      const [userId, ...contentParts] = line.split(':');
-      const content = contentParts.join(':').trim();
-      return {
-        id: (index + 1).toString(),
-        userId: userId.trim().toLowerCase().replace(' ', ''),
-        content,
-        timestamp: new Date()
-      };
-    });
-
-    const participants = Array.from(new Set(messages.map(m => m.userId)));
+        const separatorIndex = line.indexOf(':');
+        if (separatorIndex === -1) {
+            return { id: (index + 1).toString(), userId: 'unknown', content: line, timestamp: new Date() };
+        }
+        const userId = line.substring(0, separatorIndex).trim().toLowerCase().replace(/\s/g, '');
+        const content = line.substring(separatorIndex + 1).trim();
+        return {
+            id: (index + 1).toString(),
+            userId,
+            content,
+            timestamp: new Date()
+        };
+    }).filter(m => m.content);
 
     const mediator = new Mediator(selectedCriteria);
-    const analysisResult = await mediator.mediate(messages, participants);
+    const analysisResult = await mediator.mediate(messages);
     
     setResult(analysisResult);
     setIsAnalyzing(false);
@@ -47,74 +48,72 @@ const MediatorPage = () => {
     if (score >= 50) return 'text-yellow-400';
     return 'text-red-400';
   };
-
+  
   const getScoreBackground = (score: number) => {
-    if (score >= 70) return 'bg-green-400';
-    if (score >= 50) return 'bg-yellow-400';
-    return 'bg-red-400';
+    if (score >= 70) return 'bg-green-500';
+    if (score >= 50) return 'bg-yellow-500';
+    return 'bg-red-500';
   };
 
-  const WinnerBadge = ({ winner, confidence }: { winner: MediationResult['winner'], confidence: number }) => {
+  const WinnerBadge = ({ winner, confidence }: { winner: string, confidence: number }) => {
     if (winner === 'draw') {
       return (
         <div className="flex items-center gap-2 px-4 py-2 bg-gray-600 rounded-full">
           <Scale className="w-5 h-5 text-gray-300" />
-          <span className="text-gray-300 font-semibold">DRAW</span>
+          <span className="text-gray-300 font-semibold uppercase">DRAW</span>
           <span className="text-gray-400 text-sm">{confidence}% confidence</span>
         </div>
       );
     }
+     if (winner === 'insufficient_data') {
+      return (
+        <div className="flex items-center gap-2 px-4 py-2 bg-yellow-600 rounded-full">
+          <AlertTriangle className="w-5 h-5" />
+          <span className="font-semibold uppercase">INSUFFICIENT DATA</span>
+        </div>
+      );
+    }
     
-    const isWinnerA = winner === 'participant_a';
     return (
-      <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${isWinnerA ? 'bg-green-600' : 'bg-blue-600'}`}>
+      <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-purple-600">
         <Target className="w-5 h-5 text-white" />
-        <span className="text-white font-semibold">
-          {isWinnerA ? 'PARTICIPANT A' : 'PARTICIPANT B'} WINS
-        </span>
+        <span className="text-white font-semibold uppercase">{winner} WINS</span>
         <span className="text-gray-200 text-sm">{confidence}% confidence</span>
       </div>
     );
   };
 
-  const ScoreBar = ({ label, scoreA, scoreB, icon: Icon }: { label: string, scoreA: number, scoreB: number, icon: React.ElementType }) => (
+  const ScoreBar = ({ label, analysis, participantNames, icon: Icon }: { label: keyof ParticipantAnalysis, analysis: Record<string, ParticipantAnalysis>, participantNames: string[], icon: React.ElementType }) => (
     <div className="space-y-2">
       <div className="flex items-center gap-2 text-gray-300">
         <Icon className="w-5 h-5" />
-        <span className="font-medium">{label}</span>
+        <span className="font-medium capitalize">{label.replace(/([A-Z])/g, ' $1')}</span>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-1">
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-400">Participant A</span>
-            <span className={getScoreColor(scoreA)}>{scoreA}%</span>
-          </div>
-          <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-            <div 
-              className={`h-full ${getScoreBackground(scoreA)} transition-all duration-1000`}
-              style={{ width: `${scoreA}%` }}
-            />
-          </div>
-        </div>
-        <div className="space-y-1">
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-400">Participant B</span>
-            <span className={getScoreColor(scoreB)}>{scoreB}%</span>
-          </div>
-          <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-            <div 
-              className={`h-full ${getScoreBackground(scoreB)} transition-all duration-1000`}
-              style={{ width: `${scoreB}%` }}
-            />
-          </div>
-        </div>
+        {participantNames.map(name => {
+          const score = analysis[name]?.[label] as number || 0;
+          return (
+            <div key={name} className="space-y-1">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-400 capitalize">{name}</span>
+                <span className={getScoreColor(score)}>{Math.round(score)}%</span>
+              </div>
+              <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full ${getScoreBackground(score)} transition-all duration-1000`}
+                  style={{ width: `${score}%` }}
+                />
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   );
 
   const BiasIndicator = ({ biases, participant }: { biases: string[], participant: string }) => (
     <div className="space-y-2">
-      <h4 className="text-sm font-medium text-gray-300">{participant}</h4>
+      <h4 className="text-sm font-medium text-gray-300 capitalize">{participant}</h4>
       {biases.length === 0 ? (
         <div className="flex items-center gap-2 text-green-400">
           <CheckCircle className="w-4 h-4" />
@@ -132,6 +131,8 @@ const MediatorPage = () => {
       )}
     </div>
   );
+  
+  const participantNames = result ? Object.keys(result.analysis) : [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white p-6">
@@ -174,7 +175,7 @@ const MediatorPage = () => {
                       ...prev,
                       [key]: parseFloat(e.target.value)
                     }))}
-                    className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                    className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-purple-500"
                   />
                   <span className="text-sm text-gray-400 w-12">
                     {Math.round(value * 100)}%
@@ -196,13 +197,14 @@ const MediatorPage = () => {
             </div>
             
             <p className="text-gray-300 mb-6">{result.reasoning}</p>
+            {result.suggestedResolution && <p className="text-purple-300 italic mb-6">{result.suggestedResolution}</p>}
 
             <div className="grid md:grid-cols-2 gap-8">
               {/* Scores */}
               <div className="space-y-4">
-                <ScoreBar label="Factual Accuracy" scoreA={result.factualAccuracy.participant_a} scoreB={result.factualAccuracy.participant_b} icon={CheckCircle} />
-                <ScoreBar label="Logical Consistency" scoreA={result.logicalConsistency.participant_a} scoreB={result.logicalConsistency.participant_b} icon={Brain} />
-                <ScoreBar label="Evidence Quality" scoreA={result.evidenceQuality.participant_a} scoreB={result.evidenceQuality.participant_b} icon={Eye} />
+                <ScoreBar label="factualAccuracy" analysis={result.analysis} participantNames={participantNames} icon={CheckCircle} />
+                <ScoreBar label="logicalConsistency" analysis={result.analysis} participantNames={participantNames} icon={Brain} />
+                <ScoreBar label="evidenceQuality" analysis={result.analysis} participantNames={participantNames} icon={Eye} />
               </div>
               
               {/* Bias and Key Points */}
@@ -210,25 +212,22 @@ const MediatorPage = () => {
                 <div>
                   <h3 className="text-lg font-semibold mb-3 flex items-center gap-2"><Shield className="w-5 h-5 text-purple-400" /> Bias Detection</h3>
                   <div className="grid grid-cols-2 gap-4">
-                    <BiasIndicator biases={result.biasDetection.participant_a} participant="Participant A" />
-                    <BiasIndicator biases={result.biasDetection.participant_b} participant="Participant B" />
+                     {participantNames.map(name => (
+                        <BiasIndicator key={name} biases={result.analysis[name]?.biasDetection || []} participant={name} />
+                     ))}
                   </div>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-3 flex items-center gap-2"><Zap className="w-5 h-5 text-purple-400" /> Key Points</h3>
                   <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <h4 className="font-semibold text-gray-300 mb-2">Participant A</h4>
-                      <ul className="list-disc list-inside space-y-1 text-gray-400">
-                        {result.keyPoints.participant_a.map((point, i) => <li key={i}>{point}</li>)}
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-300 mb-2">Participant B</h4>
-                      <ul className="list-disc list-inside space-y-1 text-gray-400">
-                        {result.keyPoints.participant_b.map((point, i) => <li key={i}>{point}</li>)}
-                      </ul>
-                    </div>
+                     {participantNames.map(name => (
+                      <div key={name}>
+                        <h4 className="font-semibold text-gray-300 mb-2 capitalize">{name}</h4>
+                        <ul className="list-disc list-inside space-y-1 text-gray-400">
+                          {(result.analysis[name]?.keyPoints || []).map((point, i) => <li key={i}>{point}</li>)}
+                        </ul>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
