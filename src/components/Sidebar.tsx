@@ -33,6 +33,7 @@ const featureItems = [
 
 const motivationItems = [
   { href: '/features/motivation', icon: Sparkles, label: 'Get a Boost' },
+  { href: '/features/instant-relief', icon: Zap, label: 'Instant Relief' },
 ];
 
 const planningItems = [
@@ -75,12 +76,28 @@ const NavItem: React.FC<NavItemProps> = ({ href, icon: Icon, label, pathname }) 
 
 export default function Sidebar({ isOpen }: { isOpen: boolean }) {
   const pathname = usePathname();
-  const [featuresOpen, setFeaturesOpen] = useState(true);
-  const [historyOpen, setHistoryOpen] = useState(true);
-  const [motivationOpen, setMotivationOpen] = useState(true);
-  const [planningOpen, setPlanningOpen] = useState(true);
-  const [reflectionOpen, setReflectionOpen] = useState(true);
+  const [featuresOpen, setFeaturesOpen] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [motivationOpen, setMotivationOpen] = useState(false);
+  const [planningOpen, setPlanningOpen] = useState(false);
+  const [reflectionOpen, setReflectionOpen] = useState(false);
   const [conversationHistory, setConversationHistory] = useState<Conversation[]>([]);
+  const [hoveredSection, setHoveredSection] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Logic to keep the correct section open based on the current URL
+    const isFeature = featureItems.some(item => pathname.startsWith(item.href));
+    const isMotivation = motivationItems.some(item => pathname.startsWith(item.href));
+    const isPlanning = planningItems.some(item => pathname.startsWith(item.href));
+    const isReflection = selfReflectionItems.some(item => pathname.startsWith(item.href));
+    const isHistory = pathname.startsWith('/chat/');
+
+    setFeaturesOpen(isFeature);
+    setMotivationOpen(isMotivation);
+    setPlanningOpen(isPlanning);
+    setReflectionOpen(isReflection);
+    setHistoryOpen(isHistory);
+  }, [pathname]);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -137,50 +154,58 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
             </div>
 
             <div className="flex-grow overflow-y-auto -mr-3 pr-3">
-              <button
-                className="w-full flex justify-between items-center px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider"
+              <div
+                onMouseEnter={() => setHoveredSection('history')}
+                onMouseLeave={() => setHoveredSection(null)}
                 onClick={() => setHistoryOpen(!historyOpen)}
               >
-                <span>Chat History</span>
-                {historyOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-              </button>
-              <AnimatePresence>
-                {historyOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    className="space-y-0.5 overflow-hidden"
-                  >
-                    {conversationHistory.map((item) => {
-                      const isActive = pathname === `/chat/${item.id}`;
-                      return (
-                        <Link key={item.id} href={`/chat/${item.id}`} passHref>
-                          <div className={`group flex justify-between items-center space-x-2 px-3 py-1.5 rounded-md cursor-pointer text-xs transition-all duration-200 ease-in-out ${isActive ? 'bg-sakura-bg text-sakura-accent font-semibold' : 'text-sakura-dark hover:bg-sakura-bg'}`}>
-                            <span className="truncate flex-1">{item.title}</span>
-                            <button onClick={(e) => handleDelete(e, item.id)} className="opacity-0 group-hover:opacity-100 text-sakura-dark/50 hover:text-red-500 transition-opacity">
-                                <Trash2 size={12} />
-                            </button>
-                          </div>
-                        </Link>
-                      );
-                    })}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                <button
+                  className="w-full flex justify-between items-center px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider"
+                >
+                  <span>Chat History</span>
+                  {(historyOpen || hoveredSection === 'history') ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+                <AnimatePresence>
+                  {(historyOpen || hoveredSection === 'history') && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      className="space-y-0.5 overflow-hidden"
+                    >
+                      {conversationHistory.map((item) => {
+                        const isActive = pathname === `/chat/${item.id}`;
+                        return (
+                          <Link key={item.id} href={`/chat/${item.id}`} passHref>
+                            <div className={`group flex justify-between items-center space-x-2 px-3 py-1.5 rounded-md cursor-pointer text-xs transition-all duration-200 ease-in-out ${isActive ? 'bg-sakura-bg text-sakura-accent font-semibold' : 'text-sakura-dark hover:bg-sakura-bg'}`}>
+                              <span className="truncate flex-1">{item.title}</span>
+                              <button onClick={(e) => handleDelete(e, item.id)} className="opacity-0 group-hover:opacity-100 text-sakura-dark/50 hover:text-red-500 transition-opacity">
+                                  <Trash2 size={12} />
+                              </button>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
 
-            <div>
+            <div
+              onMouseEnter={() => setHoveredSection('features')}
+              onMouseLeave={() => setHoveredSection(null)}
+              onClick={() => setFeaturesOpen(!featuresOpen)}
+            >
               <button
                 className="w-full flex justify-between items-center px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider"
-                onClick={() => setFeaturesOpen(!featuresOpen)}
               >
                 <span>Features</span>
-                {featuresOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                {(featuresOpen || hoveredSection === 'features') ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </button>
               <AnimatePresence>
-                {featuresOpen && (
+                {(featuresOpen || hoveredSection === 'features') && (
                    <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
@@ -196,16 +221,19 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
               </AnimatePresence>
             </div>
 
-            <div>
+            <div
+              onMouseEnter={() => setHoveredSection('motivation')}
+              onMouseLeave={() => setHoveredSection(null)}
+              onClick={() => setMotivationOpen(!motivationOpen)}
+            >
               <button
                 className="w-full flex justify-between items-center px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider"
-                onClick={() => setMotivationOpen(!motivationOpen)}
               >
                 <span>Motivation</span>
-                {motivationOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                {(motivationOpen || hoveredSection === 'motivation') ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </button>
               <AnimatePresence>
-                {motivationOpen && (
+                {(motivationOpen || hoveredSection === 'motivation') && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
@@ -221,16 +249,19 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
               </AnimatePresence>
             </div>
 
-            <div>
+            <div
+              onMouseEnter={() => setHoveredSection('planning')}
+              onMouseLeave={() => setHoveredSection(null)}
+              onClick={() => setPlanningOpen(!planningOpen)}
+            >
               <button
                 className="w-full flex justify-between items-center px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider"
-                onClick={() => setPlanningOpen(!planningOpen)}
               >
                 <span>Planning</span>
-                {planningOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                {(planningOpen || hoveredSection === 'planning') ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </button>
               <AnimatePresence>
-                {planningOpen && (
+                {(planningOpen || hoveredSection === 'planning') && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
@@ -246,16 +277,19 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
               </AnimatePresence>
             </div>
 
-            <div>
+            <div
+              onMouseEnter={() => setHoveredSection('reflection')}
+              onMouseLeave={() => setHoveredSection(null)}
+              onClick={() => setReflectionOpen(!reflectionOpen)}
+            >
               <button
                 className="w-full flex justify-between items-center px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider"
-                onClick={() => setReflectionOpen(!reflectionOpen)}
               >
                 <span>Self Reflection</span>
-                {reflectionOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                {(reflectionOpen || hoveredSection === 'reflection') ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </button>
               <AnimatePresence>
-                {reflectionOpen && (
+                {(reflectionOpen || hoveredSection === 'reflection') && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
@@ -270,11 +304,9 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
                 )}
               </AnimatePresence>
             </div>
-
           </nav>
 
           <div className="mt-auto">
-            <h3 className="px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider">Resources</h3>
             {resourcesItems.map((item) => (
               <NavItem key={item.href} {...item} pathname={pathname} />
             ))}
@@ -282,4 +314,4 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
         </div>
     </motion.aside>
   );
-} 
+}

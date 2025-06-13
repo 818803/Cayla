@@ -36,7 +36,20 @@ const avatarMap = {
     'Disgust': '/assets/images/avataaars copy 5.png',
     'Love': '/assets/images/avataaars copy 6.png',
     'Normal': '/assets/images/avataaars.png',
-    'Analytical': '/assets/images/avataaars.png'
+    'Analytical': '/assets/images/avataaars.png',
+    'Happy': '/assets/images/avataaars.png',
+    'Sad': '/assets/images/avataaars copy.png',
+    'Annoyed': '/assets/images/avataaars copy 2.png',
+    'Goofy': '/assets/images/avataaars copy 4.png',
+    'Barf': '/assets/images/avataaars copy 5.png',
+    'Concern': '/assets/images/avataaars copy 3.png',
+    'Curiosity': '/assets/images/avataaars.png',
+    'Gratitude': '/assets/images/avataaars copy 6.png',
+    'Excitement': '/assets/images/avataaars.png',
+    'Contentment': '/assets/images/avataaars.png',
+    'Warmth': '/assets/images/avataaars copy 6.png',
+    'Understanding': '/assets/images/avataaars.png',
+    'Empathy': '/assets/images/avataaars copy 6.png'
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
@@ -64,7 +77,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoading, currentEmotion, error, className = '' })=>{
+const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoading, error, className = '' })=>{
     _s();
     const scrollRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
@@ -89,7 +102,7 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
             }
         }
     };
-    const currentAvatar = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$sentiment$2d$analysis$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["avatarMap"][currentEmotion] || __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$sentiment$2d$analysis$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["avatarMap"]['Normal'];
+    const currentAvatar = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$sentiment$2d$analysis$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["avatarMap"]['Normal'];
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: `flex flex-col h-full max-h-screen bg-white dark:bg-gray-800 rounded-4xl ${className}`,
         children: [
@@ -109,12 +122,12 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                             priority: true
                         }, currentAvatar, false, {
                             fileName: "[project]/src/components/chatinterface.tsx",
-                            lineNumber: 57,
+                            lineNumber: 55,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/chatinterface.tsx",
-                        lineNumber: 56,
+                        lineNumber: 54,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -124,7 +137,7 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                                 children: "Chat with Cayla"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/chatinterface.tsx",
-                                lineNumber: 68,
+                                lineNumber: 66,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -132,19 +145,19 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                                 children: "Your private AI guide for emotional clarity"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/chatinterface.tsx",
-                                lineNumber: 69,
+                                lineNumber: 67,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/chatinterface.tsx",
-                        lineNumber: 67,
+                        lineNumber: 65,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/chatinterface.tsx",
-                lineNumber: 55,
+                lineNumber: 53,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -152,7 +165,7 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                 className: "flex-1 overflow-y-auto p-6 space-y-5",
                 children: [
                     messages.map((m)=>{
-                        const avatarSrc = m.sender === 'bot' && m.emotion ? __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$sentiment$2d$analysis$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["avatarMap"][m.emotion] : __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$sentiment$2d$analysis$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["avatarMap"]['Normal'];
+                        const avatarSrc = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$sentiment$2d$analysis$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["avatarMap"]['Normal'];
                         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: `flex items-end gap-3 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`,
                             children: [
@@ -166,12 +179,12 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                                         className: "rounded-full"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/chatinterface.tsx",
-                                        lineNumber: 81,
+                                        lineNumber: 79,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/chatinterface.tsx",
-                                    lineNumber: 80,
+                                    lineNumber: 78,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -180,18 +193,18 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                                         children: m.message
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/chatinterface.tsx",
-                                        lineNumber: 88,
+                                        lineNumber: 86,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/chatinterface.tsx",
-                                    lineNumber: 84,
+                                    lineNumber: 82,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, m.id, true, {
                             fileName: "[project]/src/components/chatinterface.tsx",
-                            lineNumber: 78,
+                            lineNumber: 76,
                             columnNumber: 13
                         }, this);
                     }),
@@ -208,12 +221,12 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                                     className: "rounded-full"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/chatinterface.tsx",
-                                    lineNumber: 96,
+                                    lineNumber: 94,
                                     columnNumber: 16
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/chatinterface.tsx",
-                                lineNumber: 95,
+                                lineNumber: 93,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -225,44 +238,44 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                                             className: "w-2 h-2 bg-sakura-pink rounded-full animate-pulse delay-75"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/chatinterface.tsx",
-                                            lineNumber: 100,
+                                            lineNumber: 98,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "w-2 h-2 bg-sakura-pink rounded-full animate-pulse delay-150"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/chatinterface.tsx",
-                                            lineNumber: 101,
+                                            lineNumber: 99,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "w-2 h-2 bg-sakura-pink rounded-full animate-pulse delay-300"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/chatinterface.tsx",
-                                            lineNumber: 102,
+                                            lineNumber: 100,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/chatinterface.tsx",
-                                    lineNumber: 99,
+                                    lineNumber: 97,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/chatinterface.tsx",
-                                lineNumber: 98,
+                                lineNumber: 96,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/chatinterface.tsx",
-                        lineNumber: 94,
+                        lineNumber: 92,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/chatinterface.tsx",
-                lineNumber: 74,
+                lineNumber: 72,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -277,7 +290,7 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                                         children: "API Error:"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/chatinterface.tsx",
-                                        lineNumber: 113,
+                                        lineNumber: 111,
                                         columnNumber: 16
                                     }, this),
                                     " ",
@@ -285,7 +298,7 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/chatinterface.tsx",
-                                lineNumber: 113,
+                                lineNumber: 111,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -293,13 +306,13 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                                 children: "Please check your OPENAI_API_KEY in .env.local and restart the server."
                             }, void 0, false, {
                                 fileName: "[project]/src/components/chatinterface.tsx",
-                                lineNumber: 114,
+                                lineNumber: 112,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/chatinterface.tsx",
-                        lineNumber: 112,
+                        lineNumber: 110,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -315,7 +328,7 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                                 className: "flex-1 p-3 bg-sakura-gray dark:bg-gray-700 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-sakura-accent transition-all text-sakura-text dark:text-gray-200 placeholder:text-sakura-text/50 dark:placeholder:text-gray-400"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/chatinterface.tsx",
-                                lineNumber: 118,
+                                lineNumber: 116,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -326,30 +339,30 @@ const ChatInterface = ({ messages, input, handleInputChange, handleSubmit, isLoa
                                     size: 18
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/chatinterface.tsx",
-                                    lineNumber: 131,
+                                    lineNumber: 129,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/chatinterface.tsx",
-                                lineNumber: 126,
+                                lineNumber: 124,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/chatinterface.tsx",
-                        lineNumber: 117,
+                        lineNumber: 115,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/chatinterface.tsx",
-                lineNumber: 110,
+                lineNumber: 108,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/chatinterface.tsx",
-        lineNumber: 53,
+        lineNumber: 51,
         columnNumber: 5
     }, this);
 };
@@ -384,12 +397,11 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function transformToUIMessages(messages, emotionMap) {
+function transformToUIMessages(messages) {
     return messages.map((msg)=>({
             id: msg.id,
             message: msg.content,
             sender: msg.role === 'user' ? 'user' : 'bot',
-            emotion: msg.role === 'assistant' ? emotionMap.get(msg.id) || 'Normal' : undefined,
             timestamp: msg.createdAt || new Date()
         }));
 }
@@ -397,98 +409,34 @@ function ChatPage() {
     _s();
     const params = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"])();
     const sessionId = params.sessionId;
-    const [currentEmotion, setCurrentEmotion] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('Normal');
-    const [emotionMap, setEmotionMap] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(new Map());
-    const [initialMessages, setInitialMessages] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [isHistoryLoaded, setIsHistoryLoaded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "ChatPage.useEffect": ()=>{
-            if (sessionId && !isHistoryLoaded) {
-                const conversation = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$conversation$2d$history$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getConversation"])(sessionId);
-                if (conversation) {
-                    setInitialMessages(conversation.messages);
-                }
-                setIsHistoryLoaded(true);
-            }
-        }
-    }["ChatPage.useEffect"], [
-        sessionId,
-        isHistoryLoaded
-    ]);
-    const { messages, input, handleInputChange, handleSubmit, isLoading, error, setMessages } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$ai$2f$react$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useChat"])({
+    // Fetch initial messages directly
+    const conversation = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$conversation$2d$history$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getConversation"])(sessionId);
+    const initialMessages = conversation ? conversation.messages : [];
+    const { messages, input, handleInputChange, handleSubmit, isLoading, error } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$ai$2f$react$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useChat"])({
         api: '/api/chat',
         id: sessionId,
         initialMessages: initialMessages,
-        onResponse: {
-            "ChatPage.useChat": (response)=>{
-                const emotion = response.headers.get('X-Emotion');
-                if (emotion) {
-                    setCurrentEmotion(emotion);
-                }
-            }
-        }["ChatPage.useChat"],
         onFinish: {
             "ChatPage.useChat": (message)=>{
-                setEmotionMap({
-                    "ChatPage.useChat": (prev)=>new Map(prev).set(message.id, currentEmotion)
-                }["ChatPage.useChat"]);
+                // Create a snapshot of the messages to save
+                const messagesToSave = [
+                    ...messages,
+                    message
+                ];
+                const firstUserMessage = messagesToSave.find({
+                    "ChatPage.useChat.firstUserMessage": (m)=>m.role === 'user'
+                }["ChatPage.useChat.firstUserMessage"]);
+                const title = conversation?.title || (firstUserMessage ? firstUserMessage.content.substring(0, 30) : 'New Chat');
+                (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$conversation$2d$history$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["saveConversation"])(sessionId, title, messagesToSave);
+                window.dispatchEvent(new Event('conversationHistoryChanged'));
             }
         }["ChatPage.useChat"]
     });
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "ChatPage.useEffect": ()=>{
-            if (isHistoryLoaded && initialMessages.length > 0 && messages.length === 0) {
-                setMessages(initialMessages);
-            }
-        }
-    }["ChatPage.useEffect"], [
-        isHistoryLoaded,
-        initialMessages,
-        messages,
-        setMessages
-    ]);
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "ChatPage.useEffect": ()=>{
-            if (sessionId && messages.length > 0 && !isLoading) {
-                const firstUserMessage = messages.find({
-                    "ChatPage.useEffect.firstUserMessage": (m)=>m.role === 'user'
-                }["ChatPage.useEffect.firstUserMessage"]);
-                const conversation = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$conversation$2d$history$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getConversation"])(sessionId);
-                const title = conversation?.title || (firstUserMessage ? firstUserMessage.content.substring(0, 30) : 'New Chat');
-                (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$conversation$2d$history$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["saveConversation"])(sessionId, title, messages);
-                if (messages.length > (conversation?.messages.length || 0)) {
-                    window.dispatchEvent(new Event('conversationHistoryChanged'));
-                }
-            }
-        }
-    }["ChatPage.useEffect"], [
-        messages,
-        sessionId,
-        isLoading
-    ]);
     const uiMessages = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
-        "ChatPage.useMemo[uiMessages]": ()=>transformToUIMessages(messages, emotionMap)
+        "ChatPage.useMemo[uiMessages]": ()=>transformToUIMessages(messages)
     }["ChatPage.useMemo[uiMessages]"], [
-        messages,
-        emotionMap
+        messages
     ]);
-    if (!isHistoryLoaded) {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "flex justify-center items-center h-screen bg-sakura-bg",
-            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "text-sakura-dark",
-                children: "Loading conversation..."
-            }, void 0, false, {
-                fileName: "[project]/src/app/chat/[sessionId]/page.tsx",
-                lineNumber: 79,
-                columnNumber: 9
-            }, this)
-        }, void 0, false, {
-            fileName: "[project]/src/app/chat/[sessionId]/page.tsx",
-            lineNumber: 78,
-            columnNumber: 7
-        }, this);
-    }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "h-full w-full",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$chatinterface$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -497,21 +445,20 @@ function ChatPage() {
             handleInputChange: handleInputChange,
             handleSubmit: handleSubmit,
             isLoading: isLoading,
-            currentEmotion: currentEmotion,
             error: error?.message,
             className: "h-full w-full"
         }, void 0, false, {
             fileName: "[project]/src/app/chat/[sessionId]/page.tsx",
-            lineNumber: 86,
+            lineNumber: 46,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/chat/[sessionId]/page.tsx",
-        lineNumber: 85,
+        lineNumber: 45,
         columnNumber: 5
     }, this);
 }
-_s(ChatPage, "qcJzXGOpQfdDSGH//YyXOGBpqhM=", false, function() {
+_s(ChatPage, "7yqLn1oLzBzWE/GcIWa84/9zKFs=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$ai$2f$react$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useChat"]

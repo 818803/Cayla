@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Send } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { ChatMessage, Emotion } from '@/lib/types';
+import { ChatMessage } from '@/lib/types';
 import { avatarMap } from '@/lib/sentiment-analysis';
 
 interface ChatInterfaceProps {
@@ -13,7 +13,6 @@ interface ChatInterfaceProps {
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
-  currentEmotion: Emotion;
   error?: string | null;
   className?: string;
 }
@@ -24,7 +23,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   handleInputChange,
   handleSubmit,
   isLoading,
-  currentEmotion,
   error,
   className = '',
 }) => {
@@ -47,7 +45,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   };
 
-  const currentAvatar = avatarMap[currentEmotion] || avatarMap['Normal'];
+  const currentAvatar = avatarMap['Normal'];
 
   return (
     <div className={`flex flex-col h-full max-h-screen bg-white dark:bg-gray-800 rounded-4xl ${className}`}>
@@ -73,7 +71,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       {/* Messages */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-5">
         {messages.map((m) => {
-          const avatarSrc = (m.sender === 'bot' && m.emotion) ? avatarMap[m.emotion] : avatarMap['Normal'];
+          const avatarSrc = avatarMap['Normal'];
           return (
             <div key={m.id} className={`flex items-end gap-3 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
               {m.sender === 'bot' && (
