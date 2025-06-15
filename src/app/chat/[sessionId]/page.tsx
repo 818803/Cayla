@@ -22,7 +22,7 @@ export default function ChatPage() {
   const sessionId = params.sessionId as string;
 
   // Fetch initial messages directly
-  const conversation = getConversation(sessionId);
+      const conversation = getConversation(sessionId);
   const initialMessages = conversation ? conversation.messages : [];
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
@@ -35,7 +35,7 @@ export default function ChatPage() {
       const firstUserMessage = messagesToSave.find(m => m.role === 'user');
       const title = conversation?.title || (firstUserMessage ? firstUserMessage.content.substring(0, 30) : 'New Chat');
       saveConversation(sessionId, title, messagesToSave);
-      window.dispatchEvent(new Event('conversationHistoryChanged'));
+        window.dispatchEvent(new Event('conversationHistoryChanged'));
     }
   });
   

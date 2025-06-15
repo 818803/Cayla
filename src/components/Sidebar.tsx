@@ -161,35 +161,35 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
               >
                 <button
                   className="w-full flex justify-between items-center px-3 mb-1 text-xs font-semibold text-sakura-dark/50 uppercase tracking-wider"
-                >
-                  <span>Chat History</span>
+              >
+                <span>Chat History</span>
                   {(historyOpen || hoveredSection === 'history') ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </button>
-                <AnimatePresence>
+              </button>
+              <AnimatePresence>
                   {(historyOpen || hoveredSection === 'history') && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3, ease: 'easeInOut' }}
-                      className="space-y-0.5 overflow-hidden"
-                    >
-                      {conversationHistory.map((item) => {
-                        const isActive = pathname === `/chat/${item.id}`;
-                        return (
-                          <Link key={item.id} href={`/chat/${item.id}`} passHref>
-                            <div className={`group flex justify-between items-center space-x-2 px-3 py-1.5 rounded-md cursor-pointer text-xs transition-all duration-200 ease-in-out ${isActive ? 'bg-sakura-bg text-sakura-accent font-semibold' : 'text-sakura-dark hover:bg-sakura-bg'}`}>
-                              <span className="truncate flex-1">{item.title}</span>
-                              <button onClick={(e) => handleDelete(e, item.id)} className="opacity-0 group-hover:opacity-100 text-sakura-dark/50 hover:text-red-500 transition-opacity">
-                                  <Trash2 size={12} />
-                              </button>
-                            </div>
-                          </Link>
-                        );
-                      })}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="space-y-0.5 overflow-hidden"
+                  >
+                    {conversationHistory.map((item) => {
+                      const isActive = pathname === `/chat/${item.id}`;
+                      return (
+                        <Link key={item.id} href={`/chat/${item.id}`} passHref>
+                          <div className={`group flex justify-between items-center space-x-2 px-3 py-1.5 rounded-md cursor-pointer text-xs transition-all duration-200 ease-in-out ${isActive ? 'bg-sakura-bg text-sakura-accent font-semibold' : 'text-sakura-dark hover:bg-sakura-bg'}`}>
+                            <span className="truncate flex-1">{item.title}</span>
+                            <button onClick={(e) => handleDelete(e, item.id)} className="opacity-0 group-hover:opacity-100 text-sakura-dark/50 hover:text-red-500 transition-opacity">
+                                <Trash2 size={12} />
+                            </button>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
               </div>
             </div>
 
@@ -314,4 +314,4 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
         </div>
     </motion.aside>
   );
-}
+} 

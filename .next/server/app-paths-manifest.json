@@ -4,5 +4,11 @@
   "/api/chat/route": "app-edge-has-no-entrypoint",
   "/chat/[sessionId]/page": "app/chat/[sessionId]/page.js",
   "/chat/page": "app/chat/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/features/instant-relief/page": "app/features/instant-relief/page.js",
+  "/features/motivation/page": "app/features/motivation/page.js",
+  "/features/planning/page": "app/features/planning/page.js",
+  "/features/relationship-advice/page": "app/features/relationship-advice/page.js",
+  "/features/self-reflection/page": "app/features/self-reflection/page.js",
+  "/mediator/page": "app/mediator/page.js"
 }
