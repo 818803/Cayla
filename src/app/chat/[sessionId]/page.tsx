@@ -29,6 +29,9 @@ export default function ChatPage() {
     api: '/api/chat',
     id: sessionId,
     initialMessages: initialMessages,
+    body: {
+      sessionId: sessionId
+    },
     onFinish: (message) => {
       // Create a snapshot of the messages to save
       const messagesToSave = [...messages, message];

@@ -2,43 +2,5 @@
   "version": 3,
   "middleware": {},
   "sortedMiddleware": [],
-  "functions": {
-    "/api/chat/route": {
-      "files": [
-        "server/server-reference-manifest.js",
-        "server/middleware-build-manifest.js",
-        "server/next-font-manifest.js",
-        "server/interception-route-rewrite-manifest.js",
-        "server/app/api/chat/route_client-reference-manifest.js",
-        "server/edge/chunks/_next-internal_server_app_api_chat_route_actions_cf3bea7b.js",
-        "server/edge/chunks/_next-internal_server_app_api_chat_route_actions_5819dece.js",
-        "server/edge/chunks/_9eb41852._.js",
-        "server/edge/chunks/node_modules_zod_dist_esm_06684221._.js",
-        "server/edge/chunks/node_modules_@ai-sdk_openai_dist_index_mjs_102cbacd._.js",
-        "server/edge/chunks/node_modules_zod-to-json-schema_dist_esm_01db9d07._.js",
-        "server/edge/chunks/node_modules_ai_dist_index_mjs_12733dd5._.js",
-        "server/edge/chunks/node_modules_f226b17c._.js",
-        "server/edge/chunks/[root-of-the-server]__fb338bfa._.js",
-        "server/edge/chunks/edge-wrapper_07cb76a9.js",
-        "server/app/api/chat/route/react-loadable-manifest.js"
-      ],
-      "name": "/api/chat",
-      "page": "/api/chat/route",
-      "matchers": [
-        {
-          "regexp": "^/api/chat(?:/)?$",
-          "originalSource": "/api/chat"
-        }
-      ],
-      "wasm": [],
-      "assets": [],
-      "env": {
-        "__NEXT_BUILD_ID": "development",
-        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "6qQuSx6HRCIpvOl0q1eZdPEwBxVRkNZ5XpDKXrEAjic=",
-        "__NEXT_PREVIEW_MODE_ID": "94c3228e891b2b87d5f1894bc6ec725f",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "b633b2d53879ff4f07feb498b2dc80032db7632d5cb94d260be6bd8e5df43073",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "f87f41b910e1353ca08c5e94c22ffd860606de53f0bf5a982786d3c92f1ea721"
-      }
-    }
-  }
+  "functions": {}
 }

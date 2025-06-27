@@ -1,9 +1,11 @@
 'use client'
-import React from 'react';
+import React, {useState} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Lock, HeartHandshake, Zap, TrafficCone, Scale } from 'lucide-react';
 import TypewriterText from '@/components/TypewriterText';
+import WelcomScreen from '@/components/WelcomScreen'; // Adjust path if needed
+
 
 const features = [
   {
@@ -60,6 +62,12 @@ const colorClasses = {
 };
 
 export default function Homepage() {
+    const [showWelcome, setShowWelcome] = useState(true);
+
+    if (showWelcome) {
+    return <WelcomScreen onFinish={() => setShowWelcome(false)} />;
+  }
+
   return (
     <div className="w-full font-sans">
       {/* Hero Section */}

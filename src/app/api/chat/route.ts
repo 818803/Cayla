@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   if (!process.env.OPENAI_API_KEY) {
     return new Response(
       'Missing OPENAI_API_KEY. Please add it to your .env.local file and restart the development server.',
-      { status: 500 }
+      { status: 401 }
     );
   }
 
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
 
     return result.toTextStreamResponse();
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error in chatbot route:', error);
     
     let errorMessage = 'An unexpected error occurred.';
@@ -42,12 +42,18 @@ export async function POST(req: Request) {
 
     if (error instanceof Error) {
       // Check for specific authentication error messages from OpenAI
-      if (error.message.includes('authentication')) {
-        errorMessage = 'Authentication error. Your OpenAI API key might be invalid or expired.';
+      if (
+        error.message?.includes('authentication') ||
+        error.message?.includes('api key')
+      ) {
+        errorMessage =
+          'Authentication error. Your OpenAI API key might be invalid or expired.';
         status = 401;
       } else {
-        errorMessage = error.message;
+        errorMessage = error.message || 'An error occurred.';
       }
+    } else if (typeof error === 'string') {
+      errorMessage = error;
     }
     
     return new Response(errorMessage, { 

@@ -478,6 +478,9 @@ function ChatPage() {
         api: '/api/chat',
         id: sessionId,
         initialMessages: initialMessages,
+        body: {
+            sessionId: sessionId
+        },
         onFinish: (message)=>{
             // Create a snapshot of the messages to save
             const messagesToSave = [
@@ -505,12 +508,12 @@ function ChatPage() {
             className: "h-full w-full"
         }, void 0, false, {
             fileName: "[project]/src/app/chat/[sessionId]/page.tsx",
-            lineNumber: 46,
+            lineNumber: 49,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/chat/[sessionId]/page.tsx",
-        lineNumber: 45,
+        lineNumber: 48,
         columnNumber: 5
     }, this);
 }

@@ -36,7 +36,7 @@ const SYSTEM_PROMPT = 'You are Cayla, a friendly and intelligent AI chatbot. You
 async function POST(req) {
     if (!process.env.OPENAI_API_KEY) {
         return new Response('Missing OPENAI_API_KEY. Please add it to your .env.local file and restart the development server.', {
-            status: 500
+            status: 401
         });
     }
     try {
@@ -62,12 +62,14 @@ async function POST(req) {
         let status = 500;
         if (error instanceof Error) {
             // Check for specific authentication error messages from OpenAI
-            if (error.message.includes('authentication')) {
+            if (error.message?.includes('authentication') || error.message?.includes('api key')) {
                 errorMessage = 'Authentication error. Your OpenAI API key might be invalid or expired.';
                 status = 401;
             } else {
-                errorMessage = error.message;
+                errorMessage = error.message || 'An error occurred.';
             }
+        } else if (typeof error === 'string') {
+            errorMessage = error;
         }
         return new Response(errorMessage, {
             status: status
